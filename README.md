@@ -118,8 +118,7 @@ After the processing workflow, you can expect output directories like:
 
 ```text
 graftM/graftM_processing/nrfA/
-GraftM/graftM_processing/nirK/
-... 
+graftM/graftM_processing/nirK/
 ```
 
 Typical outputs include:
