@@ -55,7 +55,7 @@ nextflow run graftM.nf \
 --restrict_read_length 150 \
 --genes nrfA,nirK,nirS,nosZ \
 --threads 8 \
---conda_env ~/miniforge3/envs/graftM_workflow \
+--conda_env /path/to/graftM_workflow \
 -with-conda
 ```
 
@@ -65,6 +65,7 @@ Notes:
 
 - `--path` should point to a directory containing gzipped paired-end read files. GraftM is typically run on the forward reads only.
 - `--genes` is a comma-separated list and is case-sensitive (no spaces).
+- `--conda_env` should be adjusted to your local environment, e.g. ~/miniforge3/envs/graftM_workflow.
 - The available genes are currently: `nrfA`, `nirK`, `nirS`, `nosZ`.
 
 ### 2) Post-process GraftM placements
@@ -107,8 +108,8 @@ This second workflow is a filtering pipeline designed to refine GraftM hits. It:
 
 The script expects gene-specific clade lists and decoy HMM files, for example:
 
-- `databases/nrfA_ingroup_outgroup.txt`
-- `decoys/nrfA_K03385_decoys.hmm`
+- `databases/clade-files/nrfA_ingroup_outgroup.txt`
+- `databases/decoys/nrfA_K03385_decoys.hmm`
 
 These paths are defined in the parameter block of the script and should be adjusted if needed.
 
@@ -129,6 +130,10 @@ Typical outputs include:
 - `acc0.95_filtered_jplace_split/*.jplace`
 
 These files summarize the gene hits that pass the post-processing filters and can be used for downstream interpretation or visualization.
+
+## Next step
+
+Gappa (https://github.com/lczech/gappa/wiki) can be used for further analysis of jplace files.
 
 ## Notes
 
