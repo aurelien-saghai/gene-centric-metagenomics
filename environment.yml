@@ -1,0 +1,17 @@
+#create environment by runnning: mamba env create -f environment.yml
+
+name: graftM_workflow
+
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+
+#Run with nextflow v. 25.10.0
+
+dependencies:
+  - graftm=0.13.1
+  - gappa=0.9.0
+  - pplacer=1.1.alpha19
+  - hmmer=3.3.2
+  - R
