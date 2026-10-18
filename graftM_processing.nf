@@ -1,23 +1,34 @@
 #!/usr/bin/env nextflow
 nextflow.enable.dsl=2
 
+// This workflow post-processes graftM output for a set of target genes.
+// It starts from per-gene result directories, filters false positives using HMMER,
+// and then splits the remaining placements into per-sample jplace files for downstream
+// phylogenetic interpretation. The steps are intentionally staged so that each process
+// validates intermediate outputs before moving on to the next stage.
+
 params.results_dir = 'graftM'
 params.outdir = 'graftM/graftM_processing'
+params.conda_env = "${System.getProperty('user.home')}/miniforge3/envs/graftM_workflow"
 params.genes = null
 params.threads = 1
-params.nrfA_clade_list = 'databases/nrfA_ingroup_outgroup.txt'
-params.nirK_clade_list = 'databases/nirK_ingroup_only.txt'
-params.nirS_clade_list = 'databases/nirS_ingroup_only.txt'
-params.nosZ_clade_list = 'databases/nosZ_2021_clade_I_II_as_ingroup.txt'
-params.nosZ_split_clade_list = 'databases/nosZ_2021_clade_I_II.txt'
-params.nrfA_decoy = 'decoys/nrfA_K03385_decoys.hmm'
-params.nirK_decoy = 'decoys/nirK_K00368_decoys.hmm'
-params.nirS_decoy = 'decoys/nirS_K15864_decoys.hmm'
-params.nosZ_decoy = 'decoys/nosZ_K00376_decoys.hmm'
+params.nrfA_clade_list = 'databases/clade-files/nrfA_ingroup_outgroup.txt'
+params.nirK_clade_list = 'databases/clade-files/nirK_ingroup_only.txt'
+params.nirS_clade_list = 'databases/clade-files/nirS_ingroup_only.txt'
+params.nosZ_clade_list = 'databases/clade-files/nosZ_2021_clade_I_II_as_ingroup.txt'
+params.nosZ_split_clade_list = 'databases/clade-files/nosZ_2021_clade_I_II.txt'
+params.nrfA_decoy = 'databases/decoys/nrfA_K03385_decoys.hmm'
+params.nirK_decoy = 'databases/decoys/nirK_K00368_decoys.hmm'
+params.nirS_decoy = 'databases/decoys/nirS_K15864_decoys.hmm'
+params.nosZ_decoy = 'databases/decoys/nosZ_K00376_decoys.hmm'
 params.help = false
 
+// Step 1: aggregate per-sample graftM placements across all samples for one gene,
+// then keep only the relevant ingroup hits before writing a merged jplace file.
+// This stage converts the raw graftM outputs into a cleaned set of candidate placements
+// that can be checked against known gene-specific HMMs in the next step.
 process PROCESS_GENE_PLACEMENTS {
-    conda '/home/ausa0001/miniforge3/envs/gappa'
+    conda params.conda_env
 
     tag "$gene"
     cpus params.threads.toString().toInteger()
@@ -120,8 +131,12 @@ process PROCESS_GENE_PLACEMENTS {
     """
 }
 
+// Step 2: remove likely false positives from the candidate hit set.
+// The workflow gathers all ORFs from the graftM outputs, retains only ingroup IDs,
+// scans them against a decoy HMM, and keeps only sequences that match the expected KO.
+// The resulting jplace file is written out for subsequent splitting and reporting.
 process FILTER_FALSE_POSITIVES {
-    conda '/home/ausa0001/miniforge3/envs/gappa'
+    conda params.conda_env
 
     tag "$gene"
     cpus params.threads.toString().toInteger()
@@ -223,8 +238,11 @@ process FILTER_FALSE_POSITIVES {
     """
 }
 
+// Step 3: split the filtered placements back into sample-specific jplace files.
+// This allows each sample to be counted and interpreted independently, and also handles
+// nosZ-specific clade splitting (Clade I vs Clade II) when requested.
 process SPLIT_FILTERED_PLACEMENTS {
-    conda '/home/ausa0001/miniforge3/envs/gappa'
+    conda params.conda_env
 
     tag "$gene"
     cpus params.threads.toString().toInteger()
@@ -377,12 +395,10 @@ process SPLIT_FILTERED_PLACEMENTS {
 }
 
 workflow {
+    // Show the command-line usage and required inputs before running any work.
     if (params.help) {
         log.info """
-        module load gappa/0.8.0
-        module load pplacer/1.1.19
-        module load hmmer/3.3.2
-        module load R/4.0.2
+        The specified conda environment must contain all programs used by this workflow.
 
         Usage:
           nextflow run graftM_step1.nf \\
@@ -390,13 +406,15 @@ workflow {
             --outdir graftM/graftM_processing \\
             --genes nrfA,nirK,nirS,nosZ \\
             --threads 8 \\
+            --conda_env /path/to/graftM_workflow \\
             -with-conda
 
         Required inputs:
           --results_dir       Directory containing one graftM results directory per gene
           --outdir            Directory for flat per-gene processing outputs (default: graftM/graftM_processing)
           --genes             Comma-separated subset of nrfA,nirK,nirS,nosZ
-          --threads            CPU threads used by each process (default: 1)
+          --threads           CPU threads used by each process (default: 1)
+          --conda_env         Path to the conda environment containing all required programs (default: ~/miniforge3/envs/graftM_workflow)
 
         Gene-specific clade-list paths are set near the top of this script.
         Gene-specific decoy HMMs and their HMMER pressed indexes are also set there.
@@ -408,13 +426,24 @@ workflow {
           <outdir>/<gene>/<gene>_counts.tsv
           <outdir>/<gene>/acc0.95_filtered_jplace_split/*.jplace
 
-        Gappa, pplacer, HMMER and R must be available.
+        Gappa, guppy, HMMER and Rscript must be available in the specified environment.
         """.stripIndent()
     } else {
+        // Validate the thread count and gene-specific configuration before submission.
         if (!(params.threads.toString() ==~ /[1-9][0-9]*/)) {
             error "The --threads value must be a positive integer; received: ${params.threads}"
         }
+        if (!params.conda_env) {
+            error 'Specify the path to the shared conda environment with --conda_env'
+        }
+        def conda_env_path = file(params.conda_env.toString())
+        if (!conda_env_path.toFile().isDirectory()) {
+            error "Conda environment directory does not exist: ${conda_env_path}"
+        }
 
+        // Each gene has its own clade definition, decoy HMM, and expected KO target.
+        // These mappings are used to validate inputs and to pass the right files into
+        // every downstream process.
         def clade_params = [
             nrfA: params.nrfA_clade_list,
             nirK: params.nirK_clade_list,
@@ -438,6 +467,7 @@ workflow {
             error 'Specify one or more genes with --genes, for example --genes nrfA,nirK'
         }
 
+        // Parse the user-supplied gene list into a clean set of supported names.
         def genes = params.genes
             .split(',')
             .collect { it.trim() }
@@ -453,6 +483,9 @@ workflow {
             error "Unknown gene(s): ${unknown_genes.join(', ')}. Available genes: ${clade_params.keySet().join(', ')}"
         }
 
+        // Prepare the input tuples for the first processing step.
+        // Each tuple contains the gene name, the directory of graftM results, and the
+        // gene-specific clade list used to select ingroup placements.
         def gene_inputs = genes.collect { gene ->
             def gene_path = file("${params.results_dir}/${gene}")
             def clade_path = clade_params[gene] ? file(clade_params[gene].toString()) : null
@@ -471,6 +504,8 @@ workflow {
             tuple(gene, gene_path, clade_path)
         }
 
+        // Prepare the second-stage inputs, including the decoy HMM and its required
+        // pressed-index files for hmmscan-based filtering.
         def gene_filter_inputs = genes.collect { gene ->
             def gene_path = file("${params.results_dir}/${gene}")
             def decoy_path = file(decoy_params[gene].toString())
@@ -492,14 +527,19 @@ workflow {
             )
         }
 
+        // Run the first post-processing stage on each gene independently.
         def gene_inputs_ch = Channel.fromList(gene_inputs)
         PROCESS_GENE_PLACEMENTS(gene_inputs_ch)
 
+        // Join the step-1 outputs with the filtering inputs so that each gene enters the
+        // HMM-based false positive filter with the right reference files.
         def step2_inputs = PROCESS_GENE_PLACEMENTS.out.results
             .join(Channel.fromList(gene_filter_inputs))
 
         FILTER_FALSE_POSITIVES(step2_inputs)
 
+        // Build the final inputs for sample splitting, using the nosZ-specific clade list
+        // when needed and otherwise reusing the normal gene clade list.
         def step3_gene_inputs = genes.collect { gene ->
             def gene_path = file("${params.results_dir}/${gene}")
             def split_clade_path = gene == 'nosZ'
@@ -512,6 +552,8 @@ workflow {
 
             tuple(gene, gene_path, split_clade_path)
         }
+        // Finally, split the cleaned placements into per-sample outputs and, for nosZ,
+        // also split by Clade I/II classification.
         def step3_inputs = FILTER_FALSE_POSITIVES.out.results
             .join(Channel.fromList(step3_gene_inputs))
 
