@@ -36,7 +36,7 @@ Related publications:
 
 ## Requirements
 
-Before running the workflows, create a conda environment with the following programs using environment.yml:
+Before running the workflows, create a conda environment containing the following programs using environment.yml:
 - GraftM (https://github.com/geronimp/graftM)
 - pplacer (https://github.com/matsen/pplacer)
 - GAPPA (https://github.com/lczech/gappa)
