@@ -36,7 +36,7 @@ Related publications:
 
 ## Requirements
 
-Before running the workflows, create a conda environment containing the following programs using environment.yml:
+Before running the workflows, create a conda environment containing the following programs using the file `environment.yml`:
 - GraftM (https://github.com/geronimp/graftM)
 - pplacer (https://github.com/matsen/pplacer)
 - GAPPA (https://github.com/lczech/gappa)
@@ -80,7 +80,7 @@ nextflow run graftM_processing.nf \
   -with-conda
 ```
 
-This workflow performs quality control, removes likely false positives based on predefined clade lists and decoy HMMs, and creates count tables.
+This workflow performs quality control, removes likely false positives based on predefined clade lists and decoy HMMs, and creates count tables. It uses GAPPA, Pplacer and HMMER.
 
 ## Workflow details
 
@@ -100,7 +100,7 @@ graftM/<gene>/
 
 This second workflow is a filtering pipeline designed to refine GraftM hits. It:
 
-- finds the most likely location in the phylogeny for each placement by accumulating the placement mass (likelihood weight ratio) of the placements of each read upwards (from tips to root), until the accumulated mass reaches the threshold (--threshold 0.95)
+- finds the most likely location in the phylogeny for each placement by accumulating the placement mass (likelihood weight ratio) of the placements of each read upwards (from tips to root), until the accumulated mass reaches the threshold. Used gappa edit accumulate and --threshold 0.95.
 - creates candidate ingroup hits based on clade membership defined in the GraftM packages
 - runs `hmmscan` against gene-specific decoy HMMs from KEGG
 - keeps only sequences with expected functional KO assignments
