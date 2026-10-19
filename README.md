@@ -5,7 +5,7 @@ Gene-centric metagenomics workflow for identifying and filtering target genes in
 This repository contains two Nextflow workflows:
 
 - `graftM.nf`: runs GraftM against metagenomic read sets for selected marker genes.
-- `graftM_processing.nf`: post-processes GraftM placements to reduce false positives, filter candidate hits using HMMER, and produce per-sample and per-clade outputs.
+- `graftM_processing.nf`: post-processes GraftM placements to reduce false positives, filter candidate hits using HMMER, and produce per-sample and per-clade outputs including jplace files and count tables.
 
 The workflows are designed for gene-centric analyses of functional markers. For now it includes markers of functional guilds involved in inorganic nitrogen cycling:
 
