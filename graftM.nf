@@ -8,10 +8,10 @@ nextflow.enable.dsl=2
 // Global parameters used by the workflow.
 params.path = null
 params.restrict_read_length = null
-params.nrfA_gpkg = "databases/graftM_packages/nrfA_refpack_2021.gpkg"
-params.nirK_gpkg = "databases/graftM_packages/nirK_refpack_2021.gpkg"
-params.nirS_gpkg = "databases/graftM_packages/nirS_refpack_2021.gpkg"
-params.nosZ_gpkg = "databases/graftM_packages/nosZ_refpack_2021.gpkg"
+params.nrfA_gpkg = "${launchDir}/databases/graftM_packages/nrfA_refpack_2021.gpkg"
+params.nirK_gpkg = "${launchDir}/databases/graftM_packages/nirK_refpack_2021.gpkg"
+params.nirS_gpkg = "${launchDir}/databases/graftM_packages/nirS_refpack_2021.gpkg"
+params.nosZ_gpkg = "${launchDir}/databases/graftM_packages/nosZ_refpack_2021.gpkg"
 params.outdir = "graftM"
 params.threads = 1
 params.conda_env = "${System.getProperty('user.home')}/miniforge3/envs/graftM_workflow"
@@ -53,7 +53,7 @@ process GRAFTM {
     cpus params.threads.toString().toInteger()
     maxForks 1
 
-    publishDir { "${params.outdir}/${gene}" }, mode: 'copy',
+    publishDir path: { "${params.outdir}/${gene}" }, mode: 'copy',
         saveAs: { filename -> filename.tokenize('/').last() }
 
     input:

@@ -12,15 +12,15 @@ params.outdir = 'graftM/graftM_processing'
 params.conda_env = "${System.getProperty('user.home')}/miniforge3/envs/graftM_workflow"
 params.genes = null
 params.threads = 1
-params.nrfA_clade_list = 'databases/clade-files/nrfA_ingroup_outgroup.txt'
-params.nirK_clade_list = 'databases/clade-files/nirK_ingroup_only.txt'
-params.nirS_clade_list = 'databases/clade-files/nirS_ingroup_only.txt'
-params.nosZ_clade_list = 'databases/clade-files/nosZ_2021_clade_I_II_as_ingroup.txt'
-params.nosZ_split_clade_list = 'databases/clade-files/nosZ_2021_clade_I_II.txt'
-params.nrfA_decoy = 'databases/decoys/nrfA_K03385_decoys.hmm'
-params.nirK_decoy = 'databases/decoys/nirK_K00368_decoys.hmm'
-params.nirS_decoy = 'databases/decoys/nirS_K15864_decoys.hmm'
-params.nosZ_decoy = 'databases/decoys/nosZ_K00376_decoys.hmm'
+params.nrfA_clade_list = "${launchDir}/databases/clade-files/nrfA_ingroup_outgroup.txt"
+params.nirK_clade_list = "${launchDir}/databases/clade-files/nirK_ingroup_only.txt"
+params.nirS_clade_list = "${launchDir}/databases/clade-files/nirS_ingroup_only.txt"
+params.nosZ_clade_list = "${launchDir}/databases/clade-files/nosZ_2021_clade_I_II_as_ingroup.txt"
+params.nosZ_split_clade_list = "${launchDir}/databases/clade-files/nosZ_2021_clade_I_II.txt"
+params.nrfA_decoy = "${launchDir}/databases/decoys/nrfA_K03385_decoys.hmm"
+params.nirK_decoy = "${launchDir}/databases/decoys/nirK_K00368_decoys.hmm"
+params.nirS_decoy = "${launchDir}/databases/decoys/nirS_K15864_decoys.hmm"
+params.nosZ_decoy = "${launchDir}/databases/decoys/nosZ_K00376_decoys.hmm"
 params.help = false
 
 // Step 1: aggregate per-sample graftM placements across all samples for one gene,
