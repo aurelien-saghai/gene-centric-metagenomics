@@ -1,0 +1,29 @@
+{
+    "metadata": {
+        "create_date": "2022-02-25 15:27:39",
+        "format_version": "1.1",
+        "locus": "/var/folders/2b/6rfk08jn3219jbgntf85_b_h9cv1t8/T/tmpoexp_snj/nosZ_ref_AA_sequences"
+    },
+    "files": {
+        "phylo_model": "phylo_model4y3svc5o.json",
+        "aln_fasta": "nosZ_ref_AA_sequences_deduplicated_aligned.fasta",
+        "seq_info": "nosZ_ref_AA_sequences_seqinfo.csv",
+        "taxonomy": "nosZ_ref_AA_sequences_taxonomy.csv",
+        "tree": "graftm9ftxr2tr.tree",
+        "tree_stats": "graftm4b6erps_.tree_log"
+    },
+    "md5": {
+        "phylo_model": "963e1514a8a27f80af46feb4e86c5905",
+        "aln_fasta": "e95a4d71cdfe845cffe492d6b656e9a5",
+        "seq_info": "0a69b9920c0ec4b892f2bdf36f1740ce",
+        "taxonomy": "576091904002cff6ce366301d2f39874",
+        "tree": "3643a1c65aba5c514bd2f78d2d07455c",
+        "tree_stats": "ad0d3923178b31e0bf34da7b37cd0dc5"
+    },
+    "log": [
+        "Stripped refpkg (removed 0 files)",
+        "Loaded initial files into empty refpkg"
+    ],
+    "rollback": null,
+    "rollforward": null
+}

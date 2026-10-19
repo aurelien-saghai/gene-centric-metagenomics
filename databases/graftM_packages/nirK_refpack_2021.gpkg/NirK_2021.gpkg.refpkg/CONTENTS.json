@@ -1,0 +1,29 @@
+{
+    "metadata": {
+        "create_date": "2022-02-26 08:23:02",
+        "format_version": "1.1",
+        "locus": "/tmp/tmpgnba5b03/FINAL_220221_NirK_unaligned"
+    },
+    "files": {
+        "phylo_model": "phylo_modellkvlln06.json",
+        "aln_fasta": "FINAL_220221_NirK_unaligned_deduplicated_aligned.fasta",
+        "seq_info": "FINAL_220221_NirK_unaligned_seqinfo.csv",
+        "taxonomy": "FINAL_220221_NirK_unaligned_taxonomy.csv",
+        "tree": "RAxML_result.NIRK2021_FINAL_reduced_REROOTED.txt",
+        "tree_stats": "RAxML_info.NIRK2021_FINAL_reduced"
+    },
+    "md5": {
+        "phylo_model": "1178424bc7a997158703b167a56ff479",
+        "aln_fasta": "a774ad7f50e0f7ae906f0871c3b4d66f",
+        "seq_info": "20e9ae58d2cff721210c51109ca8a9a4",
+        "taxonomy": "db69eeaa89e7bd7153ba338b5083be3e",
+        "tree": "2b201123143ba1ca521442e1fbb4b622",
+        "tree_stats": "bddfbd008ad42975b24cd6664f3464bb"
+    },
+    "log": [
+        "Stripped refpkg (removed 0 files)",
+        "Loaded initial files into empty refpkg"
+    ],
+    "rollback": null,
+    "rollforward": null
+}

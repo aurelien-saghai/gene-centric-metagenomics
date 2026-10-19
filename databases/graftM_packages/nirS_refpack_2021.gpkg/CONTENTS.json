@@ -1,0 +1,1 @@
+{"graftm_package_version": 3, "align_hmm": "graftm9zzu3tgz_align.hmm", "search_hmms": ["graftm3017o259_search.hmm"], "refpkg": "nirS_2021_refpack.gpkg.refpkg", "trusted_cutoff": false, "range": 712.1462994836489, "unaligned_sequence_database": "nirS_seqs_final.fasta", "diamond_database": "nirS_seqs_final.dmnd"}

@@ -1,0 +1,1 @@
+{"graftm_package_version": 3, "align_hmm": "graftmw3abmts8_align.hmm", "search_hmms": ["graftmjqekxvr7_search.hmm"], "refpkg": "nrfA_2021_refpack.gpkg.refpkg", "trusted_cutoff": false, "range": 544.042869269949, "unaligned_sequence_database": "nrfA_seqs_final.fasta", "diamond_database": "nrfA_seqs_final.dmnd"}

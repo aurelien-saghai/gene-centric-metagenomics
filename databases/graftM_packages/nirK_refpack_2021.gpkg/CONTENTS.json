@@ -1,0 +1,1 @@
+{"graftm_package_version": 3, "align_hmm": "graftm5pffpcot_align.hmm", "search_hmms": ["graftmklqfixp0_search.hmm"], "refpkg": "NirK_2021.gpkg.refpkg", "trusted_cutoff": false, "range": 796.7273530711445, "unaligned_sequence_database": "FINAL_220221_NirK_unaligned.reduced.fasta", "diamond_database": "FINAL_220221_NirK_unaligned.dmnd"}

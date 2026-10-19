@@ -1,0 +1,29 @@
+{
+    "metadata": {
+        "create_date": "2022-03-21 08:10:40",
+        "format_version": "1.1",
+        "locus": "/tmp/tmp2yl_rac7/nrfA_seqs_final"
+    },
+    "files": {
+        "phylo_model": "phylo_model8_s_b3te.json",
+        "aln_fasta": "nrfA_seqs_final_deduplicated_aligned.fasta",
+        "seq_info": "nrfA_seqs_final_seqinfo.csv",
+        "taxonomy": "nrfA_seqs_final_taxonomy.csv",
+        "tree": "RAxML_result.nrfA_final_iqtree_rerooted",
+        "tree_stats": "RAxML_info.nrfA_final_iqtree_rerooted"
+    },
+    "md5": {
+        "phylo_model": "af6b6a101b1a84b2a537f312f90490aa",
+        "aln_fasta": "2769bfd0f21b4cbf4acee7c122cfd375",
+        "seq_info": "fb129cd82b1076028b212fac8dcba2f7",
+        "taxonomy": "7e91b22d7912c02dd883840a1e4c5c59",
+        "tree": "3f4f9237ae9bf491a926acb69d291aef",
+        "tree_stats": "80c45fdb47fc9e4a31cbc2cb3a771f40"
+    },
+    "log": [
+        "Stripped refpkg (removed 0 files)",
+        "Loaded initial files into empty refpkg"
+    ],
+    "rollback": null,
+    "rollforward": null
+}
