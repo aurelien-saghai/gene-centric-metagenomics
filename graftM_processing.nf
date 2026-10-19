@@ -109,6 +109,10 @@ process PROCESS_GENE_PLACEMENTS {
         fi
         guppy to_csv -o hits_acc0.95_before_hmmscan.csv --point-mass merged_jplace/merge_filtered.jplace
     else
+        if [[ "${gene}" == "nosZ" ]]; then
+            sed 's/-nan/0/g' merged_jplace/merge.jplace > merged_jplace/merge.jplace.tmp
+            mv merged_jplace/merge.jplace.tmp merged_jplace/merge.jplace
+        fi
         gappa edit extract --jplace-path merged_jplace/ --clade-list-file ../clade_list.txt --point-mass --threads ${task.cpus}
 
         if [[ ! -s samples/ingroup.jplace ]]; then
