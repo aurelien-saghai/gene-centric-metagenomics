@@ -390,7 +390,12 @@ process SPLIT_FILTERED_PLACEMENTS {
     fi
 
     mkdir -p publish_files
-    cp step3/counts.tsv "publish_files/${gene}_counts.tsv"
+    if [[ "${gene}" == "nosZ" ]]; then
+        cp step3/nosZ_I_counts.tsv publish_files/
+        cp step3/nosZ_II_counts.tsv publish_files/
+    else
+        cp step3/counts.tsv "publish_files/${gene}_counts.tsv"
+    fi
     mkdir -p publish_files/acc0.95_filtered_jplace_split
     if [[ "\$mapping_count" -gt 0 ]]; then
         cp step3/acc0.95_filtered_jplace_split/*.jplace publish_files/acc0.95_filtered_jplace_split/
@@ -405,7 +410,7 @@ workflow {
         The specified conda environment must contain all programs used by this workflow.
 
         Usage:
-          nextflow run graftM_step1.nf \\
+          nextflow run graftM_processing.nf \\
             --results_dir graftM \\
             --outdir graftM/graftM_processing \\
             --genes nrfA,nirK,nirS,nosZ \\
@@ -427,7 +432,9 @@ workflow {
         Outputs:
           <outdir>/<gene>/acc0.95_hmmscanfilter.jplace
           <outdir>/<gene>/<gene>_hits_counts.tsv
-          <outdir>/<gene>/<gene>_counts.tsv
+          <outdir>/<gene>/<gene>_counts.tsv (except nosZ)
+          <outdir>/nosZ/nosZ_I_counts.tsv
+          <outdir>/nosZ/nosZ_II_counts.tsv
           <outdir>/<gene>/acc0.95_filtered_jplace_split/*.jplace
 
         Gappa, guppy, HMMER and Rscript must be available in the specified environment.
